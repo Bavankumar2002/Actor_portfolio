@@ -1,16 +1,40 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Film, MessageCircle, Globe, Mail, PlayCircle, Star, ArrowRight, Award, Camera } from "lucide-react";
+import { Film, MessageCircle, Globe, Mail, PlayCircle, Star, ArrowRight, Award, Camera, ShieldCheck, Phone, MapPin } from "lucide-react";
+import { heroData as initialHeroData } from "@/lib/portfolio-data";
 
 export default function Home() {
+  const [hero, setHero] = useState(initialHeroData);
+
+  useEffect(() => {
+    async function refreshData() {
+      try {
+        const res = await fetch("/api/portfolio");
+        const json = await res.json();
+        if (json.success) setHero(json.data);
+      } catch (e) {
+        console.error("Failed to refresh portfolio data", e);
+      }
+    }
+    refreshData();
+  }, []);
+
   return (
     <div className="min-h-screen bg-black text-white selection:bg-primary/30">
+      {/* Admin Link */}
+      <Link href="/admin" className="fixed top-6 right-6 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full transition-all group shadow-xl">
+        <ShieldCheck size={20} className="group-hover:text-primary transition-colors" />
+      </Link>
+
       {/* 2. Banner (Hero Section) */}
       <section id="banner" className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/hero.png"
-            alt="Alexander Pierce - Actor"
+            src={hero.backgroundImage}
+            alt={`${hero.name} - Actor`}
             fill
             className="object-cover opacity-60"
             priority
@@ -20,10 +44,16 @@ export default function Home() {
 
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
           <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-6 drop-shadow-2xl">
-            Bringing <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-yellow-200">Stories</span> <br />to Life.
+            {hero.title.includes("Stories") ? (
+              <>
+                {hero.title.split('Stories')[0]}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-yellow-200">Stories</span>
+                {hero.title.split('Stories')[1]}
+              </>
+            ) : hero.title}
           </h1>
           <p className="text-lg md:text-2xl text-gray-300 font-light mb-10 max-w-2xl mx-auto">
-            Award-winning actor with over a decade of experience in film, television, and theater.
+            {hero.description}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link href="/movies" className="group relative px-8 py-4 bg-primary text-black font-bold uppercase tracking-widest overflow-hidden rounded-sm transition-all hover:scale-105">
@@ -83,21 +113,48 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16">
-            <a href="mailto:hello@alexanderpierce.com" className="flex items-center justify-center gap-3 px-8 py-5 bg-white text-black font-bold uppercase tracking-widest rounded-sm hover:bg-primary transition-colors">
+            <a href={`mailto:${hero.contactEmail}`} className="flex items-center justify-center gap-3 px-8 py-5 bg-white text-black font-bold uppercase tracking-widest rounded-sm hover:bg-primary transition-colors">
               <Mail size={20} /> Email Representation
             </a>
+            {hero.phone && (
+              <a href={`tel:${hero.phone}`} className="flex items-center justify-center gap-3 px-8 py-5 border border-white/30 text-white font-bold uppercase tracking-widest rounded-sm hover:bg-white hover:text-black transition-all">
+                <Phone size={20} /> {hero.phone}
+              </a>
+            )}
           </div>
 
+          {hero.address && (
+            <div className="flex items-center justify-center gap-3 text-gray-400 mb-12">
+              <MapPin size={18} className="text-primary" />
+              <span className="text-lg">{hero.address}</span>
+            </div>
+          )}
+
           <div className="flex justify-center gap-8 border-t border-white/10 pt-16">
-            <a href="#" className="text-gray-500 hover:text-primary transition-colors transform hover:scale-110">
-              <MessageCircle size={32} />
-            </a>
-            <a href="#" className="text-gray-500 hover:text-primary transition-colors transform hover:scale-110">
-              <Globe size={32} />
-            </a>
-            <a href="#" className="text-gray-500 hover:text-primary transition-colors transform hover:scale-110">
-              <Film size={32} />
-            </a>
+            {hero.socials?.instagram && (
+              <a href={`https://instagram.com/${hero.socials.instagram}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 text-gray-500 hover:text-primary transition-all transform hover:scale-110 group">
+                <div className="p-4 bg-white/5 rounded-full group-hover:bg-primary/10">
+                  <Globe size={32} />
+                </div>
+                <span className="text-xs font-medium uppercase tracking-tighter">@{hero.socials.instagram}</span>
+              </a>
+            )}
+            {hero.socials?.whatsapp && (
+              <a href={`https://wa.me/${hero.socials.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 text-gray-500 hover:text-green-500 transition-all transform hover:scale-110 group">
+                <div className="p-4 bg-white/5 rounded-full group-hover:bg-green-500/10">
+                  <MessageCircle size={32} />
+                </div>
+                <span className="text-xs font-medium uppercase tracking-tighter">WhatsApp</span>
+              </a>
+            )}
+            {hero.socials?.facebook && (
+              <a href={`https://facebook.com/${hero.socials.facebook}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 text-gray-500 hover:text-blue-500 transition-all transform hover:scale-110 group">
+                <div className="p-4 bg-white/5 rounded-full group-hover:bg-blue-500/10">
+                  <Globe size={32} />
+                </div>
+                <span className="text-xs font-medium uppercase tracking-tighter">Facebook</span>
+              </a>
+            )}
           </div>
         </div>
       </section>
