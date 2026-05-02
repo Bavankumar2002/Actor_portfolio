@@ -1,0 +1,38 @@
+export const movies = [
+  {
+    id: "neon-shadows",
+    title: "Neon Shadows",
+    year: "2025",
+    role: "Lead Role",
+    genre: "Sci-Fi Thriller",
+    director: "Marcus Thorne",
+    description: "A gripping sci-fi thriller exploring the boundaries of human consciousness in a dystopian metropolis. Alexander Pierce delivers a powerhouse performance as Kaelen, a rogue synthetic human seeking his origins.",
+    image: "/poster1.png",
+    rating: "4.8/5",
+    duration: "128 min",
+  },
+  {
+    id: "the-whispering-woods",
+    title: "The Whispering Woods",
+    year: "2024",
+    role: "Supporting Role",
+    genre: "Emotional Drama",
+    director: "Sarah Jenkins",
+    description: "An emotional drama following a father's journey through grief in the remote wilderness. Pierce's nuanced portrayal of Uncle Elias provides the emotional anchor for this hauntingly beautiful film.",
+    image: "/poster2.png",
+    rating: "4.6/5",
+    duration: "115 min",
+  },
+  {
+    id: "the-final-curtain",
+    title: "The Final Curtain",
+    year: "2023",
+    role: "Lead Role",
+    genre: "Classical Theater Adaptation",
+    director: "Julian Vane",
+    description: "A classical theater adaptation brought to the big screen. In this modern reimagining of a tragic masterpiece, Alexander Pierce showcases his classical training and intense stage presence.",
+    image: "/hero.png",
+    rating: "4.9/5",
+    duration: "142 min",
+  }
+];
