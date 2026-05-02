@@ -19,7 +19,7 @@ export default async function MovieDetailsPage({ params }: Props) {
   return (
     <div className="pt-20 bg-black min-h-screen text-white">
       {/* Hero Section */}
-      <section className="relative h-[60vh] flex items-end">
+      <section className="relative h-[85vh] flex items-end">
         <div className="absolute inset-0 z-0">
           <Image 
             src={movie.image} 
