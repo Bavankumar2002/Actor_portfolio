@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Film, MessageCircle, Globe, Mail, PlayCircle, Star, ArrowRight, Award, Camera, ShieldCheck, Phone, MapPin } from "lucide-react";
+import { Film, MessageCircle, Globe, Mail, PlayCircle, Star, ArrowRight, Award, Camera, Phone, MapPin } from "lucide-react";
 import { heroData as initialHeroData } from "@/lib/portfolio-data";
 
 export default function Home() {
@@ -24,11 +24,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-primary/30">
-      {/* Admin Link */}
-      <Link href="/admin" className="fixed top-6 right-6 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full transition-all group shadow-xl">
-        <ShieldCheck size={20} className="group-hover:text-primary transition-colors" />
-      </Link>
-
       {/* 2. Banner (Hero Section) */}
       <section id="banner" className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">

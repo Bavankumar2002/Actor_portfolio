@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { LayoutDashboard, Users, Mail, Film, Settings, LogOut, Bell, Search, TrendingUp, Calendar, Save, Edit3, Image as ImageIcon } from "lucide-react";
+import { movies } from "@/lib/movies";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -24,8 +26,16 @@ export default function AdminDashboard() {
   });
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
+    // Check authentication
+    const auth = localStorage.getItem("isAdmin");
+    if (auth !== "true") {
+      router.push("/login");
+      return;
+    }
+
     const fetchHero = async () => {
       try {
         const res = await fetch("/api/portfolio");
@@ -38,7 +48,12 @@ export default function AdminDashboard() {
       }
     };
     fetchHero();
-  }, []);
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAdmin");
+    router.push("/login");
+  };
 
   const handleSaveHero = async () => {
     setIsSaving(true);
@@ -88,19 +103,28 @@ export default function AdminDashboard() {
           >
             <Film size={20} /> Projects
           </button>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg font-medium transition-colors">
+          <button 
+            onClick={() => setActiveTab("messages")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === "messages" ? "bg-primary/10 text-primary" : "text-gray-400 hover:text-white hover:bg-white/5"}`}
+          >
             <Mail size={20} /> Messages
             <span className="ml-auto bg-primary text-black text-xs font-bold px-2 py-0.5 rounded-full">3</span>
-          </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg font-medium transition-colors">
+          </button>
+          <button 
+            onClick={() => setActiveTab("settings")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === "settings" ? "bg-primary/10 text-primary" : "text-gray-400 hover:text-white hover:bg-white/5"}`}
+          >
             <Settings size={20} /> Settings
-          </a>
+          </button>
         </div>
 
         <div className="p-4 border-t border-white/5">
-          <Link href="/" className="flex items-center gap-3 px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-lg font-medium transition-colors">
-            <LogOut size={20} /> Exit to Site
-          </Link>
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-lg font-medium transition-colors"
+          >
+            <LogOut size={20} /> Logout
+          </button>
         </div>
       </aside>
 
@@ -146,49 +170,61 @@ export default function AdminDashboard() {
 
               {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5">
+                <button 
+                  onClick={() => setActiveTab("analytics")}
+                  className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5 text-left hover:border-primary/50 transition-all group"
+                >
                   <div className="flex justify-between items-start mb-4">
-                    <div className="p-2 bg-blue-500/10 text-blue-400 rounded-lg">
+                    <div className="p-2 bg-blue-500/10 text-blue-400 rounded-lg group-hover:bg-blue-500/20 transition-colors">
                       <TrendingUp size={24} />
                     </div>
                     <span className="text-green-400 text-sm font-medium">+12%</span>
                   </div>
                   <h3 className="text-3xl font-bold mb-1">24.5k</h3>
                   <p className="text-gray-400 text-sm">Profile Views</p>
-                </div>
+                </button>
                 
-                <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5">
+                <button 
+                  onClick={() => setActiveTab("projects")}
+                  className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5 text-left hover:border-primary/50 transition-all group"
+                >
                   <div className="flex justify-between items-start mb-4">
-                    <div className="p-2 bg-purple-500/10 text-purple-400 rounded-lg">
+                    <div className="p-2 bg-purple-500/10 text-purple-400 rounded-lg group-hover:bg-purple-500/20 transition-colors">
                       <Film size={24} />
                     </div>
                     <span className="text-green-400 text-sm font-medium">+2</span>
                   </div>
-                  <h3 className="text-3xl font-bold mb-1">42</h3>
+                  <h3 className="text-3xl font-bold mb-1">{movies.length}</h3>
                   <p className="text-gray-400 text-sm">Total Projects</p>
-                </div>
+                </button>
 
-                <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5">
+                <button 
+                  onClick={() => setActiveTab("messages")}
+                  className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5 text-left hover:border-primary/50 transition-all group"
+                >
                   <div className="flex justify-between items-start mb-4">
-                    <div className="p-2 bg-primary/10 text-primary rounded-lg">
+                    <div className="p-2 bg-primary/10 text-primary rounded-lg group-hover:bg-primary/20 transition-colors">
                       <Mail size={24} />
                     </div>
                     <span className="text-red-400 text-sm font-medium">-5%</span>
                   </div>
                   <h3 className="text-3xl font-bold mb-1">128</h3>
                   <p className="text-gray-400 text-sm">Unread Inquiries</p>
-                </div>
+                </button>
 
-                <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5">
+                <button 
+                  onClick={() => setActiveTab("hero")}
+                  className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5 text-left hover:border-primary/50 transition-all group"
+                >
                   <div className="flex justify-between items-start mb-4">
-                    <div className="p-2 bg-green-500/10 text-green-400 rounded-lg">
+                    <div className="p-2 bg-green-500/10 text-green-400 rounded-lg group-hover:bg-green-500/20 transition-colors">
                       <Users size={24} />
                     </div>
                     <span className="text-green-400 text-sm font-medium">+18%</span>
                   </div>
                   <h3 className="text-3xl font-bold mb-1">1.2M</h3>
                   <p className="text-gray-400 text-sm">Social Followers</p>
-                </div>
+                </button>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -288,6 +324,51 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            </div>
+          ) : activeTab === "messages" ? (
+            <div className="max-w-4xl">
+              <h1 className="text-2xl font-bold mb-2">Messages & Inquiries</h1>
+              <p className="text-gray-400 mb-8">Manage your booking requests and press inquiries.</p>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-12 text-center">
+                <Mail size={48} className="mx-auto mb-4 text-gray-600" />
+                <h3 className="text-xl font-bold mb-2">No messages selected</h3>
+                <p className="text-gray-400">Select a message from the dashboard to view details here.</p>
+              </div>
+            </div>
+          ) : activeTab === "settings" ? (
+            <div className="max-w-4xl">
+              <h1 className="text-2xl font-bold mb-2">System Settings</h1>
+              <p className="text-gray-400 mb-8">Configure your portfolio site behavior and security.</p>
+              <div className="space-y-6">
+                <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5">
+                  <h3 className="font-bold mb-4">Profile Visibility</h3>
+                  <div className="flex items-center justify-between">
+                    <span>Public Profile</span>
+                    <div className="w-12 h-6 bg-primary rounded-full relative">
+                      <div className="absolute right-1 top-1 w-4 h-4 bg-black rounded-full" />
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5">
+                  <h3 className="font-bold mb-4">Security</h3>
+                  <button className="px-4 py-2 border border-white/10 rounded-lg hover:bg-white/5 transition-colors">Change Password</button>
+                </div>
+              </div>
+            </div>
+          ) : activeTab === "analytics" ? (
+            <div className="max-w-4xl">
+              <h1 className="text-2xl font-bold mb-2">Detailed Analytics</h1>
+              <p className="text-gray-400 mb-8">Insights into your profile performance and audience engagement.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-[#0a0a0a] p-8 rounded-2xl border border-white/5 flex flex-col items-center justify-center min-h-[300px]">
+                  <TrendingUp size={48} className="text-blue-500 mb-4 opacity-20" />
+                  <p className="text-gray-500">Visitor demographics and traffic sources will appear here.</p>
+                </div>
+                <div className="bg-[#0a0a0a] p-8 rounded-2xl border border-white/5 flex flex-col items-center justify-center min-h-[300px]">
+                  <Users size={48} className="text-green-500 mb-4 opacity-20" />
+                  <p className="text-gray-500">Audience growth and follower trends over time.</p>
+                </div>
               </div>
             </div>
           ) : (

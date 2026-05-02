@@ -1,5 +1,5 @@
 export const heroData = {
-  "name": "Alexander Pierce",
+  "name": "arun venkatesh",
   "title": "Bringing Stories to Life.",
   "description": "Award-winning actor with over a decade of experience in film, television, and theater.",
   "backgroundImage": "/hero.png",
