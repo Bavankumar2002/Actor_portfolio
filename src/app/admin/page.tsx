@@ -22,6 +22,15 @@ export default function AdminDashboard() {
       imdb: "",
       whatsapp: "",
       facebook: ""
+    },
+    portfolio: {
+      title: "Stills & Portraits",
+      description: "Capturing the essence of every character through compelling imagery. My portfolio showcases a range of emotions and personas, from intense dramatic headshots to cinematic action stills.",
+      features: [
+        { title: "Versatile Expressions", description: "Expertise in diverse character ranges." },
+        { title: "Cinematic Quality", description: "Professional stills from award-winning sets." }
+      ],
+      images: ["/hero.png", "/headshot_dramatic.png", "/poster1.png", "/character_action.png", "/poster2.png"]
     }
   });
   const [isSaving, setIsSaving] = useState(false);
@@ -102,6 +111,12 @@ export default function AdminDashboard() {
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === "projects" ? "bg-primary/10 text-primary" : "text-gray-400 hover:text-white hover:bg-white/5"}`}
           >
             <Film size={20} /> Projects
+          </button>
+          <button 
+            onClick={() => setActiveTab("portfolio")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === "portfolio" ? "bg-primary/10 text-primary" : "text-gray-400 hover:text-white hover:bg-white/5"}`}
+          >
+            <ImageIcon size={20} /> Portfolio
           </button>
           <button 
             onClick={() => setActiveTab("messages")}
@@ -324,6 +339,107 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            </div>
+          ) : activeTab === "portfolio" ? (
+            <div className="max-w-4xl">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h1 className="text-2xl font-bold">Manage Portfolio</h1>
+                  <p className="text-gray-400 text-sm">Update your stills, portraits, and portfolio descriptions.</p>
+                </div>
+                <button 
+                  onClick={handleSaveHero}
+                  disabled={isSaving}
+                  className="flex items-center gap-2 px-6 py-2 bg-primary text-black font-bold rounded-lg hover:bg-primary/90 transition-all disabled:opacity-50"
+                >
+                  <Save size={18} /> {isSaving ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5">
+                  <h3 className="font-bold mb-4">Portfolio Content</h3>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm text-gray-400">Section Title</label>
+                      <input 
+                        type="text" 
+                        value={hero.portfolio?.title || ""} 
+                        onChange={(e) => setHero({...hero, portfolio: {...hero.portfolio, title: e.target.value}})}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-primary/50" 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm text-gray-400">Description</label>
+                      <textarea 
+                        rows={3} 
+                        value={hero.portfolio?.description || ""}
+                        onChange={(e) => setHero({...hero, portfolio: {...hero.portfolio, description: e.target.value}})}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-primary/50 resize-none" 
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5">
+                  <h3 className="font-bold mb-4">Portfolio Features</h3>
+                  <div className="space-y-6">
+                    {(hero.portfolio?.features || []).map((feature: any, idx: number) => (
+                      <div key={idx} className="p-4 bg-white/5 rounded-lg border border-white/10 space-y-4">
+                        <div className="space-y-2">
+                          <label className="text-sm text-gray-400">Feature {idx + 1} Title</label>
+                          <input 
+                            type="text" 
+                            value={feature.title} 
+                            onChange={(e) => {
+                              const newFeatures = [...hero.portfolio.features];
+                              newFeatures[idx].title = e.target.value;
+                              setHero({...hero, portfolio: {...hero.portfolio, features: newFeatures}});
+                            }}
+                            className="w-full bg-black border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-primary/50" 
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm text-gray-400">Feature {idx + 1} Description</label>
+                          <input 
+                            type="text" 
+                            value={feature.description} 
+                            onChange={(e) => {
+                              const newFeatures = [...hero.portfolio.features];
+                              newFeatures[idx].description = e.target.value;
+                              setHero({...hero, portfolio: {...hero.portfolio, features: newFeatures}});
+                            }}
+                            className="w-full bg-black border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-primary/50" 
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5">
+                  <h3 className="font-bold mb-4">Gallery Images (5)</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    {(hero.portfolio?.images || []).map((img: string, i: number) => (
+                      <div key={i} className="aspect-square bg-white/5 rounded-lg border border-white/10 overflow-hidden relative group">
+                        <img src={img} alt={`Gallery ${i+1}`} className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-center p-2">
+                          <input 
+                            type="text" 
+                            value={img} 
+                            onChange={(e) => {
+                              const newImages = [...hero.portfolio.images];
+                              newImages[i] = e.target.value;
+                              setHero({...hero, portfolio: {...hero.portfolio, images: newImages}});
+                            }}
+                            className="w-full bg-black/80 border border-white/20 text-[10px] rounded px-1 outline-none"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           ) : activeTab === "messages" ? (

@@ -12,5 +12,26 @@ export const heroData = {
     "imdb": "nm1234567",
     "whatsapp": "+15551234567",
     "facebook": "alexander.pierce"
+  },
+  "portfolio": {
+    "title": "Stills & Portraits",
+    "description": "Capturing the essence of every character through compelling imagery. My portfolio showcases a range of emotions and personas, from intense dramatic headshots to cinematic action stills.",
+    "features": [
+      {
+        "title": "Versatile Expressions",
+        "description": "Expertise in diverse character ranges."
+      },
+      {
+        "title": "Cinematic Quality",
+        "description": "Professional stills from award-winning sets."
+      }
+    ],
+    "images": [
+      "/hero.png",
+      "/headshot_dramatic.png",
+      "/poster1.png",
+      "/character_action.png",
+      "/poster2.png"
+    ]
   }
 };

@@ -21,7 +21,7 @@ export default function LoginPage() {
 
     // Simulated login logic
     setTimeout(() => {
-      if (email === "admin@alexanderpierce.com" && password === "admin123") {
+      if (email === "admin@gmail.com" && password === "admin123") {
         localStorage.setItem("isAdmin", "true");
         router.push("/admin");
       } else {
@@ -70,7 +70,7 @@ export default function LoginPage() {
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@alexanderpierce.com"
+                  placeholder="admin@gmail.com"
                   required
                   className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white focus:outline-none focus:border-primary/50 focus:bg-white/[0.08] transition-all"
                 />
