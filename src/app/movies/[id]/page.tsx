@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Star, Clock, User, Film, Calendar } from "lucide-react";
+import { ArrowLeft, Star, Clock, User, Film, Calendar, PlayCircle } from "lucide-react";
 import { movies } from "@/lib/movies";
 
 type Props = {
@@ -60,6 +60,23 @@ export default async function MovieDetailsPage({ params }: Props) {
       <section className="py-24 px-6">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-16">
           <div className="lg:col-span-2 space-y-12">
+            {movie.trailerUrl && (
+              <div className="mb-16">
+                <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
+                  <PlayCircle className="text-primary" /> Watch Video                
+                </h2>
+                <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                  <iframe 
+                    src={movie.trailerUrl}
+                    title={`${movie.title} Trailer`}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+            )}
+
             <div>
               <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
                 <Film className="text-primary" /> Synopsis

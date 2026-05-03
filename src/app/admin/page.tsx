@@ -183,6 +183,24 @@ export default function AdminDashboard() {
                 </button>
               </div>
 
+              {/* Hero Profile Card */}
+              <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5 mb-8 flex flex-col sm:flex-row items-center gap-6 group hover:border-primary/30 transition-all">
+                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/50 group-hover:border-primary transition-colors flex-shrink-0">
+                  <img src={hero.backgroundImage} alt={hero.name} className="w-full h-full object-cover" />
+                </div>
+                <div className="flex-1 text-center sm:text-left">
+                  <h2 className="text-xl font-bold">{hero.name}</h2>
+                  <p className="text-primary text-sm font-medium uppercase tracking-widest">{hero.title}</p>
+                  <p className="text-gray-400 text-sm mt-2 line-clamp-2 max-w-2xl">{hero.description}</p>
+                </div>
+                <button 
+                  onClick={() => setActiveTab("hero")}
+                  className="px-6 py-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-white/20 transition-all text-sm font-bold uppercase tracking-wider"
+                >
+                  Edit Profile
+                </button>
+              </div>
+
               {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <button 
@@ -487,7 +505,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </div>
-          ) : (
+          ) : activeTab === "hero" ? (
             <div className="max-w-4xl">
               <div className="flex items-center justify-between mb-8">
                 <div>
@@ -546,6 +564,7 @@ export default function AdminDashboard() {
                       className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
                     />
                   </div>
+                </div>
 
                 <div className="space-y-4 pt-6 border-t border-white/5">
                   <h3 className="text-lg font-bold text-primary uppercase tracking-widest text-xs">Social Links & IDs</h3>
@@ -581,7 +600,6 @@ export default function AdminDashboard() {
                       />
                     </div>
                   </div>
-                </div>
                 </div>
 
                 <div className="space-y-2">
@@ -622,6 +640,10 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full text-gray-500">
+              <p>Please select a tab from the sidebar.</p>
             </div>
           )}
         </div>

@@ -3,9 +3,9 @@ export const heroData = {
   "title": "Bringing Stories to Life.",
   "description": "Award-winning actor with over a decade of experience in film, television, and theater.",
   "backgroundImage": "/hero.png",
-  "contactEmail": "hello@alexanderpierce.com",
+  "contactEmail": "arun@alexanderpierce.com",
   "phone": "+1 (555) 123-4567",
-  "address": "123 Actor's Lane, Beverly Hills, CA 90210",
+  "address": "123 Actor's Lane, Beverly Hills, CA 90211",
   "socials": {
     "instagram": "alexander_p",
     "twitter": "alex_p",

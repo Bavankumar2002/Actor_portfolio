@@ -15,9 +15,7 @@ export default function MoviesPage() {
               </div>
               <h2 className="text-4xl md:text-6xl font-bold">Featured <span className="text-primary">Projects</span></h2>
             </div>
-            <button className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors font-bold uppercase tracking-widest text-sm">
-              Full IMDB Profile <ArrowRight size={16} />
-            </button>
+
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

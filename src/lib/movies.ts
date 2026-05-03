@@ -10,6 +10,7 @@ export const movies = [
     image: "/poster1.png",
     rating: "4.8/5",
     duration: "128 min",
+    trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
   },
   {
     id: "the-whispering-woods",
@@ -22,6 +23,7 @@ export const movies = [
     image: "/poster2.png",
     rating: "4.6/5",
     duration: "115 min",
+    trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
   },
   {
     id: "the-final-curtain",
@@ -34,5 +36,6 @@ export const movies = [
     image: "/hero.png",
     rating: "4.9/5",
     duration: "142 min",
+    trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
   }
 ];
