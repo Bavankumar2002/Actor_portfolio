@@ -15,7 +15,7 @@ export default function Footer() {
           <Link href="/awards" className="hover:text-white">Awards</Link>
           <Link href="/#contact" className="hover:text-white">Contact</Link>
         </div>
-        <p className="opacity-50">© {new Date().getFullYear()} Alexander Pierce. All rights reserved.</p>
+        <p className="opacity-50" suppressHydrationWarning>© {new Date().getFullYear()} Alexander Pierce. All rights reserved.</p>
       </div>
     </footer>
   );
