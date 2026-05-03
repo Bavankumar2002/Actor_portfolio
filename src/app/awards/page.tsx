@@ -9,7 +9,7 @@ export default function AwardsPage() {
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full text-primary border border-primary/20 text-sm font-semibold tracking-widest uppercase mb-6">
               <Award size={16} /> Recognition
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold">Awards & <span className="text-primary">Honours</span></h2>
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold">Awards & <span className="text-primary">Honours</span></h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -19,7 +19,7 @@ export default function AwardsPage() {
               { year: "2023", title: "Critics Choice Award", org: "National Media Awards", movie: "Midnight Express" },
               { year: "2022", title: "Rising Star Award", org: "British Academy Awards", movie: "Career Achievement" },
             ].map((award, i) => (
-              <div key={i} className="p-8 bg-white/5 border border-white/10 rounded-xl flex items-start gap-6 hover:bg-white/10 transition-colors group">
+              <div key={i} className="p-6 sm:p-8 bg-white/5 border border-white/10 rounded-xl flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-6 hover:bg-white/10 transition-colors group">
                 <div className="p-4 bg-primary/20 rounded-lg text-primary group-hover:bg-primary group-hover:text-black transition-colors">
                   <Award size={24} />
                 </div>

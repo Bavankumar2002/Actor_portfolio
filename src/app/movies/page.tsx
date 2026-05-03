@@ -13,7 +13,7 @@ export default function MoviesPage() {
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full text-primary border border-primary/20 text-sm font-semibold tracking-widest uppercase mb-6">
                 <Film size={16} /> Movie Cards
               </div>
-              <h2 className="text-4xl md:text-6xl font-bold">Featured <span className="text-primary">Projects</span></h2>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold">Featured <span className="text-primary">Projects</span></h2>
             </div>
 
           </div>

@@ -38,12 +38,12 @@ export default function PortfolioPage() {
       <section id="portfolio" className="py-32 px-6 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
           {/* Left Side: Images */}
-          <div className="w-full lg:w-3/5 grid grid-cols-2 gap-4">
+          <div className="w-full lg:w-3/5 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
             <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden border border-white/10 group">
               <Image src={portfolio.images[0] || "/hero.png"} alt="Portfolio 1" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden border border-white/10 group translate-y-8">
+            <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden border border-white/10 group md:translate-y-8">
               <Image src={portfolio.images[1] || "/headshot_dramatic.png"} alt="Portfolio 2" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
@@ -51,11 +51,11 @@ export default function PortfolioPage() {
               <Image src={portfolio.images[2] || "/poster1.png"} alt="Portfolio 3" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden border border-white/10 group translate-y-8">
+            <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden border border-white/10 group md:translate-y-8">
               <Image src={portfolio.images[3] || "/character_action.png"} alt="Portfolio 4" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <div className="relative h-[300px] md:h-[500px] rounded-lg overflow-hidden border border-white/10 group col-span-2 -translate-y-4">
+            <div className="relative h-[300px] md:h-[500px] rounded-lg overflow-hidden border border-white/10 group sm:col-span-2 md:-translate-y-4">
               <Image src={portfolio.images[4] || "/poster2.png"} alt="Portfolio 5" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>

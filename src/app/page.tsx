@@ -38,7 +38,7 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
-          <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-6 drop-shadow-2xl">
+          <h1 className="text-4xl sm:text-5xl md:text-8xl font-black uppercase tracking-tighter mb-6 drop-shadow-2xl">
             {hero.title.includes("Stories") ? (
               <>
                 {hero.title.split('Stories')[0]}
@@ -47,7 +47,7 @@ export default function Home() {
               </>
             ) : hero.title}
           </h1>
-          <p className="text-lg md:text-2xl text-gray-300 font-light mb-10 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-2xl text-gray-300 font-light mb-10 max-w-2xl mx-auto">
             {hero.description}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -102,7 +102,7 @@ export default function Home() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full text-primary border border-primary/20 text-sm font-semibold tracking-widest uppercase mb-6">
             <MessageCircle size={16} /> Contact
           </div>
-          <h2 className="text-5xl md:text-7xl font-black mb-8">Get in <span className="text-primary">Touch</span></h2>
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-black mb-8">Get in <span className="text-primary">Touch</span></h2>
           <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
             Currently accepting scripts for late 2026. For booking inquiries, press, and representation.
           </p>
