@@ -127,15 +127,15 @@ export default function Home() {
 
           <div className="flex justify-center gap-8 border-t border-white/10 pt-16">
             {hero.socials?.instagram && (
-              <a href={`https://instagram.com/${hero.socials.instagram}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 text-gray-500 hover:text-primary transition-all transform hover:scale-110 group">
+              <a href={hero.socials.instagram} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 text-gray-500 hover:text-primary transition-all transform hover:scale-110 group">
                 <div className="p-4 bg-white/5 rounded-full group-hover:bg-primary/10">
                   <Globe size={32} />
                 </div>
-                <span className="text-xs font-medium uppercase tracking-tighter">@{hero.socials.instagram}</span>
+                <span className="text-xs font-medium uppercase tracking-tighter">Instagram</span>
               </a>
             )}
             {hero.socials?.whatsapp && (
-              <a href={`https://wa.me/${hero.socials.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 text-gray-500 hover:text-green-500 transition-all transform hover:scale-110 group">
+              <a href={hero.socials.whatsapp} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 text-gray-500 hover:text-green-500 transition-all transform hover:scale-110 group">
                 <div className="p-4 bg-white/5 rounded-full group-hover:bg-green-500/10">
                   <MessageCircle size={32} />
                 </div>
@@ -143,7 +143,7 @@ export default function Home() {
               </a>
             )}
             {hero.socials?.facebook && (
-              <a href={`https://facebook.com/${hero.socials.facebook}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 text-gray-500 hover:text-blue-500 transition-all transform hover:scale-110 group">
+              <a href={hero.socials.facebook} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 text-gray-500 hover:text-blue-500 transition-all transform hover:scale-110 group">
                 <div className="p-4 bg-white/5 rounded-full group-hover:bg-blue-500/10">
                   <Globe size={32} />
                 </div>

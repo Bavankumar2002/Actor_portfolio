@@ -1,4 +1,21 @@
-export const movies = [
+export interface Movie {
+  id: string;
+  title: string;
+  year: string;
+  role: string;
+  genre: string;
+  director: string;
+  description: string;
+  image: string;
+  rating: string;
+  duration: string;
+  language: string;
+  music: string;
+  production: string;
+  trailerUrl: string;
+}
+
+export const movies: Movie[] = [
   {
     id: "neon-shadows",
     title: "Neon Shadows",
@@ -10,6 +27,9 @@ export const movies = [
     image: "/poster1.png",
     rating: "4.8/5",
     duration: "128 min",
+    language: "English",
+    music: "Hans Zimmer",
+    production: "Apex Studios",
     trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
   },
   {
@@ -23,6 +43,9 @@ export const movies = [
     image: "/poster2.png",
     rating: "4.6/5",
     duration: "115 min",
+    language: "English",
+    music: "Ludovico Einaudi",
+    production: "Lumina Pictures",
     trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
   },
   {
@@ -36,6 +59,9 @@ export const movies = [
     image: "/hero.png",
     rating: "4.9/5",
     duration: "142 min",
+    language: "English",
+    music: "John Williams",
+    production: "Vanguard Arts",
     trailerUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
   }
 ];

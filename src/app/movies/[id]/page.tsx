@@ -86,20 +86,6 @@ export default async function MovieDetailsPage({ params }: Props) {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="p-8 bg-white/5 border border-white/10 rounded-xl">
-                <h4 className="text-gray-500 text-sm uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <User size={16} className="text-primary" /> Directed By
-                </h4>
-                <p className="text-2xl font-bold">{movie.director}</p>
-              </div>
-              <div className="p-8 bg-white/5 border border-white/10 rounded-xl">
-                <h4 className="text-gray-500 text-sm uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <Clock size={16} className="text-primary" /> Duration
-                </h4>
-                <p className="text-2xl font-bold">{movie.duration}</p>
-              </div>
-            </div>
           </div>
 
           <div className="space-y-8">
@@ -107,16 +93,32 @@ export default async function MovieDetailsPage({ params }: Props) {
               <h3 className="text-xl font-bold mb-6">Production Credits</h3>
               <div className="space-y-6">
                 <div>
+                  <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Director</p>
+                  <p className="text-lg font-semibold">{movie.director}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Language</p>
+                  <p className="text-lg font-semibold">{movie.language}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Music</p>
+                  <p className="text-lg font-semibold">{movie.music}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Duration</p>
+                  <p className="text-lg font-semibold">{movie.duration}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Production</p>
+                  <p className="text-lg font-semibold">{movie.production}</p>
+                </div>
+                <div>
                   <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Role</p>
                   <p className="text-lg font-semibold">{movie.role}</p>
                 </div>
                 <div>
                   <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Release Date</p>
                   <p className="text-lg font-semibold">{movie.year}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Production</p>
-                  <p className="text-lg font-semibold">Apex Studios</p>
                 </div>
               </div>
               <button className="w-full mt-10 py-4 bg-primary text-black font-bold uppercase tracking-widest hover:scale-105 transition-transform rounded-sm">

@@ -3,17 +3,17 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LayoutDashboard, Users, Mail, Film, Settings, LogOut, Bell, Search, TrendingUp, Calendar, Save, Edit3, Image as ImageIcon } from "lucide-react";
+import { LayoutDashboard, Users, Mail, Film, Settings, LogOut, Bell, Search, TrendingUp, Calendar, Save, Edit3, X, Image as ImageIcon } from "lucide-react";
 import { movies } from "@/lib/movies";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [hero, setHero] = useState({
-    name: "Alexander Pierce",
+    name: "Arun Venkatesh",
     title: "Bringing Stories to Life.",
     description: "Award-winning actor with over a decade of experience in film, television, and theater.",
     backgroundImage: "/hero.png",
-    contactEmail: "hello@alexanderpierce.com",
+    contactEmail: "arun@alexanderpierce.com",
     phone: "",
     address: "",
     socials: {
@@ -33,6 +33,9 @@ export default function AdminDashboard() {
       images: ["/hero.png", "/headshot_dramatic.png", "/poster1.png", "/character_action.png", "/poster2.png"]
     }
   });
+  const [localMovies, setLocalMovies] = useState(movies);
+  const [isMovieModalOpen, setIsMovieModalOpen] = useState(false);
+  const [currentMovie, setCurrentMovie] = useState<any>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
   const router = useRouter();
@@ -83,6 +86,58 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleAddMovie = () => {
+    setCurrentMovie({
+      id: `movie-${Date.now()}`,
+      title: "",
+      year: new Date().getFullYear().toString(),
+      role: "",
+      genre: "",
+      director: "",
+      duration: "",
+      language: "English",
+      music: "",
+      production: "",
+      description: "",
+      image: "/poster1.png",
+      rating: "5.0/5",
+      trailerUrl: ""
+    });
+    setIsMovieModalOpen(true);
+  };
+
+  const handleEditMovie = (movie: any) => {
+    setCurrentMovie({ ...movie });
+    setIsMovieModalOpen(true);
+  };
+
+  const handleDeleteMovie = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this movie?")) {
+      setLocalMovies(localMovies.filter(m => m.id !== id));
+      setMessage("Movie deleted!");
+      setTimeout(() => setMessage(""), 3000);
+    }
+  };
+
+  const handleSaveMovie = () => {
+    if (!currentMovie.title) {
+      alert("Movie title is required!");
+      return;
+    }
+    
+    const exists = localMovies.find(m => m.id === currentMovie.id);
+    if (exists) {
+      setLocalMovies(localMovies.map(m => m.id === currentMovie.id ? currentMovie : m));
+      setMessage("Movie updated!");
+    } else {
+      setLocalMovies([...localMovies, currentMovie]);
+      setMessage("Movie added!");
+    }
+    
+    setIsMovieModalOpen(false);
+    setTimeout(() => setMessage(""), 3000);
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-white flex">
       {/* Sidebar */}
@@ -107,10 +162,10 @@ export default function AdminDashboard() {
             <Edit3 size={20} /> Edit Hero
           </button>
           <button 
-            onClick={() => setActiveTab("projects")}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === "projects" ? "bg-primary/10 text-primary" : "text-gray-400 hover:text-white hover:bg-white/5"}`}
+            onClick={() => setActiveTab("movies")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${activeTab === "movies" ? "bg-primary/10 text-primary" : "text-gray-400 hover:text-white hover:bg-white/5"}`}
           >
-            <Film size={20} /> Projects
+            <Film size={20} /> Movies
           </button>
           <button 
             onClick={() => setActiveTab("portfolio")}
@@ -146,7 +201,7 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Header */}
-        <header className="h-20 bg-[#0a0a0a] border-b border-white/5 flex items-center justify-between px-8">
+    <header className="h-20 bg-[#0a0a0a] border-b border-white/5 flex items-center justify-between px-8">
           <div className="relative w-64 hidden sm:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
             <input 
@@ -164,7 +219,7 @@ export default function AdminDashboard() {
             </button>
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-yellow-200"></div>
-              <span className="text-sm font-medium hidden sm:block">Alexander P.</span>
+              <span className="text-sm font-medium hidden sm:block">{hero.name}</span>
             </div>
           </div>
         </header>
@@ -178,8 +233,11 @@ export default function AdminDashboard() {
                   <h1 className="text-2xl font-bold">Dashboard Overview</h1>
                   <p className="text-gray-400 text-sm">Welcome back! Here's what's happening today.</p>
                 </div>
-                <button className="px-4 py-2 bg-primary text-black font-semibold rounded-lg hover:bg-primary/90 transition-colors">
-                  + New Project
+                <button 
+                  onClick={() => setActiveTab("movies")}
+                  className="px-4 py-2 bg-primary text-black font-semibold rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                  + New Movie
                 </button>
               </div>
 
@@ -218,8 +276,8 @@ export default function AdminDashboard() {
                 </button>
                 
                 <button 
-                  onClick={() => setActiveTab("projects")}
-                  className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5 text-left hover:border-primary/50 transition-all group"
+                  onClick={() => setActiveTab("movies")}
+                  className={`bg-[#0a0a0a] p-6 rounded-xl border border-white/5 text-left hover:border-primary/50 transition-all group`}
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-2 bg-purple-500/10 text-purple-400 rounded-lg group-hover:bg-purple-500/20 transition-colors">
@@ -228,7 +286,7 @@ export default function AdminDashboard() {
                     <span className="text-green-400 text-sm font-medium">+2</span>
                   </div>
                   <h3 className="text-3xl font-bold mb-1">{movies.length}</h3>
-                  <p className="text-gray-400 text-sm">Total Projects</p>
+                  <p className="text-gray-400 text-sm">Total Movies</p>
                 </button>
 
                 <button 
@@ -311,15 +369,18 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </>
-          ) : activeTab === "projects" ? (
+          ) : activeTab === "movies" ? (
             <div className="max-w-6xl">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h1 className="text-2xl font-bold">Manage Projects</h1>
+                  <h1 className="text-2xl font-bold">Manage Movies</h1>
                   <p className="text-gray-400 text-sm">Add, edit or remove your filmography and theater work.</p>
                 </div>
-                <button className="px-4 py-2 bg-primary text-black font-semibold rounded-lg hover:bg-primary/90 transition-colors">
-                  + Add Project
+                <button 
+                  onClick={handleAddMovie}
+                  className="px-4 py-2 bg-primary text-black font-semibold rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                  + Add Movie
                 </button>
               </div>
 
@@ -327,7 +388,7 @@ export default function AdminDashboard() {
                 <table className="w-full text-left">
                   <thead className="bg-white/5 border-b border-white/10 text-xs uppercase tracking-wider text-gray-400">
                     <tr>
-                      <th className="px-6 py-4 font-semibold">Project</th>
+                      <th className="px-6 py-4 font-semibold">Movie</th>
                       <th className="px-6 py-4 font-semibold">Year</th>
                       <th className="px-6 py-4 font-semibold">Role</th>
                       <th className="px-6 py-4 font-semibold">Genre</th>
@@ -335,11 +396,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
-                    {[
-                      { title: "Neon Shadows", year: "2025", role: "Lead", genre: "Sci-Fi" },
-                      { title: "The Whispering Woods", year: "2024", role: "Supporting", genre: "Drama" },
-                      { title: "The Final Curtain", year: "2023", role: "Lead", genre: "Theater" }
-                    ].map((proj, i) => (
+                    {localMovies.map((proj, i) => (
                       <tr key={i} className="hover:bg-white/[0.02] transition-colors">
                         <td className="px-6 py-4 font-medium">{proj.title}</td>
                         <td className="px-6 py-4 text-gray-400">{proj.year}</td>
@@ -350,8 +407,18 @@ export default function AdminDashboard() {
                           </span>
                         </td>
                         <td className="px-6 py-4 text-right space-x-3">
-                          <button className="text-gray-400 hover:text-white text-sm font-medium">Edit</button>
-                          <button className="text-red-400 hover:text-red-300 text-sm font-medium">Delete</button>
+                          <button 
+                            onClick={() => handleEditMovie(proj)}
+                            className="text-gray-400 hover:text-white text-sm font-medium"
+                          >
+                            Edit
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteMovie(proj.id)}
+                            className="text-red-400 hover:text-red-300 text-sm font-medium"
+                          >
+                            Delete
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -440,19 +507,37 @@ export default function AdminDashboard() {
                   <h3 className="font-bold mb-4">Gallery Images (5)</h3>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                     {(hero.portfolio?.images || []).map((img: string, i: number) => (
-                      <div key={i} className="aspect-square bg-white/5 rounded-lg border border-white/10 overflow-hidden relative group">
-                        <img src={img} alt={`Gallery ${i+1}`} className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-center p-2">
-                          <input 
-                            type="text" 
-                            value={img} 
-                            onChange={(e) => {
-                              const newImages = [...hero.portfolio.images];
-                              newImages[i] = e.target.value;
-                              setHero({...hero, portfolio: {...hero.portfolio, images: newImages}});
-                            }}
-                            className="w-full bg-black/80 border border-white/20 text-[10px] rounded px-1 outline-none"
-                          />
+                      <div key={i} className="space-y-2">
+                        <div className="aspect-square bg-white/5 rounded-lg border border-white/10 overflow-hidden relative group">
+                          <img src={img} alt={`Gallery ${i+1}`} className="w-full h-full object-cover" />
+                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity flex-col gap-2 p-2">
+                            <label className="cursor-pointer bg-primary text-black text-[10px] font-bold uppercase py-1 px-2 rounded hover:bg-primary/80 transition-colors">
+                              Upload
+                              <input 
+                                type="file" 
+                                accept="image/*" 
+                                className="hidden" 
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    const reader = new FileReader();
+                                    reader.onloadend = () => {
+                                      const newImages = [...hero.portfolio.images];
+                                      newImages[i] = reader.result as string;
+                                      setHero({...hero, portfolio: {...hero.portfolio, images: newImages}});
+                                    };
+                                    reader.readAsDataURL(file);
+                                  }
+                                }}
+                              />
+                            </label>
+                            <input 
+                              type="text" 
+                              value={img.startsWith('data:') ? 'Base64 Image' : img} 
+                              readOnly
+                              className="w-full bg-black/80 border border-white/20 text-[10px] rounded px-1 outline-none text-center truncate"
+                            />
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -570,32 +655,32 @@ export default function AdminDashboard() {
                   <h3 className="text-lg font-bold text-primary uppercase tracking-widest text-xs">Social Links & IDs</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-400">Instagram Username</label>
+                      <label className="text-sm font-medium text-gray-400">Instagram Full Link</label>
                       <input 
                         type="text" 
                         value={hero.socials?.instagram}
                         onChange={(e) => setHero({...hero, socials: {...hero.socials, instagram: e.target.value}})}
-                        placeholder="e.g. alex_pierce"
+                        placeholder="https://instagram.com/yourprofile"
                         className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-400">WhatsApp (with Country Code)</label>
+                      <label className="text-sm font-medium text-gray-400">WhatsApp Number or Link</label>
                       <input 
                         type="text" 
                         value={hero.socials?.whatsapp}
                         onChange={(e) => setHero({...hero, socials: {...hero.socials, whatsapp: e.target.value}})}
-                        placeholder="e.g. 15551234567"
+                        placeholder="https://wa.me/15551234567"
                         className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-400">Facebook Username</label>
+                      <label className="text-sm font-medium text-gray-400">Facebook Full Link</label>
                       <input 
                         type="text" 
                         value={hero.socials?.facebook}
                         onChange={(e) => setHero({...hero, socials: {...hero.socials, facebook: e.target.value}})}
-                        placeholder="e.g. alex.pierce"
+                        placeholder="https://facebook.com/yourprofile"
                         className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
                       />
                     </div>
@@ -623,19 +708,41 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-400">Background Image Path</label>
-                  <div className="flex gap-4">
+                  <label className="text-sm font-medium text-gray-400">Background Image</label>
+                  <div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex-1 relative">
                       <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                       <input 
                         type="text" 
                         value={hero.backgroundImage}
                         onChange={(e) => setHero({...hero, backgroundImage: e.target.value})}
+                        placeholder="Path or URL"
                         className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 focus:border-primary/50 outline-none transition-colors"
                       />
                     </div>
-                    <div className="w-20 h-12 bg-white/5 rounded-lg border border-white/10 overflow-hidden">
-                      <img src={hero.backgroundImage} alt="preview" className="w-full h-full object-cover" />
+                    <div className="flex gap-4">
+                      <label className="cursor-pointer px-4 py-3 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-all flex items-center gap-2 text-sm font-bold uppercase tracking-wider">
+                        <Edit3 size={16} />
+                        Upload
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          className="hidden" 
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                setHero({...hero, backgroundImage: reader.result as string});
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                      </label>
+                      <div className="w-20 h-12 bg-white/5 rounded-lg border border-white/10 overflow-hidden">
+                        <img src={hero.backgroundImage} alt="preview" className="w-full h-full object-cover" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -648,6 +755,139 @@ export default function AdminDashboard() {
           )}
         </div>
       </main>
+
+      {/* Movie Modal */}
+      {isMovieModalOpen && currentMovie && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={() => setIsMovieModalOpen(false)} />
+          <div className="relative bg-[#0a0a0a] border border-white/10 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl p-8">
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-2xl font-bold">{localMovies.find(m => m.id === currentMovie.id) ? 'Edit Movie' : 'Add New Movie'}</h2>
+              <button onClick={() => setIsMovieModalOpen(false)} className="text-gray-500 hover:text-white"><X size={24} /></button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Movie Title</label>
+                <input 
+                  type="text" 
+                  value={currentMovie.title}
+                  onChange={(e) => setCurrentMovie({...currentMovie, title: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Release Year</label>
+                <input 
+                  type="text" 
+                  value={currentMovie.year}
+                  onChange={(e) => setCurrentMovie({...currentMovie, year: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Your Role</label>
+                <input 
+                  type="text" 
+                  value={currentMovie.role}
+                  onChange={(e) => setCurrentMovie({...currentMovie, role: e.target.value})}
+                  placeholder="e.g. Lead Role"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Genre</label>
+                <input 
+                  type="text" 
+                  value={currentMovie.genre}
+                  onChange={(e) => setCurrentMovie({...currentMovie, genre: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Director</label>
+                <input 
+                  type="text" 
+                  value={currentMovie.director}
+                  onChange={(e) => setCurrentMovie({...currentMovie, director: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Duration</label>
+                <input 
+                  type="text" 
+                  value={currentMovie.duration}
+                  onChange={(e) => setCurrentMovie({...currentMovie, duration: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Language</label>
+                <input 
+                  type="text" 
+                  value={currentMovie.language}
+                  onChange={(e) => setCurrentMovie({...currentMovie, language: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Music Composer</label>
+                <input 
+                  type="text" 
+                  value={currentMovie.music}
+                  onChange={(e) => setCurrentMovie({...currentMovie, music: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Production House</label>
+                <input 
+                  type="text" 
+                  value={currentMovie.production}
+                  onChange={(e) => setCurrentMovie({...currentMovie, production: e.target.value})}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Trailer URL (Embed Link)</label>
+                <input 
+                  type="text" 
+                  value={currentMovie.trailerUrl}
+                  onChange={(e) => setCurrentMovie({...currentMovie, trailerUrl: e.target.value})}
+                  placeholder="https://www.youtube.com/embed/..."
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2 mb-8">
+              <label className="text-sm font-medium text-gray-400">Synopsis / Description</label>
+              <textarea 
+                rows={4}
+                value={currentMovie.description}
+                onChange={(e) => setCurrentMovie({...currentMovie, description: e.target.value})}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors resize-none"
+              />
+            </div>
+
+            <div className="flex justify-end gap-4">
+              <button 
+                onClick={() => setIsMovieModalOpen(false)}
+                className="px-6 py-3 border border-white/10 rounded-lg hover:bg-white/5 transition-all font-bold uppercase tracking-wider text-sm"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleSaveMovie}
+                className="px-8 py-3 bg-primary text-black font-bold rounded-lg hover:bg-primary/90 transition-all uppercase tracking-wider text-sm"
+              >
+                Save Movie
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
