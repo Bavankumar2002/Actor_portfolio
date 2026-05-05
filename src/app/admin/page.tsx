@@ -309,6 +309,7 @@ export default function AdminDashboard() {
                 <button 
                   onClick={() => setActiveTab("analytics")}
                   className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5 text-left hover:border-primary/50 transition-all group"
+                  suppressHydrationWarning
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-2 bg-blue-500/10 text-blue-400 rounded-lg group-hover:bg-blue-500/20 transition-colors">
@@ -323,6 +324,7 @@ export default function AdminDashboard() {
                 <button 
                   onClick={() => setActiveTab("movies")}
                   className={`bg-[#0a0a0a] p-6 rounded-xl border border-white/5 text-left hover:border-primary/50 transition-all group`}
+                  suppressHydrationWarning
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-2 bg-purple-500/10 text-purple-400 rounded-lg group-hover:bg-purple-500/20 transition-colors">
@@ -337,6 +339,7 @@ export default function AdminDashboard() {
                 <button 
                   onClick={() => setActiveTab("messages")}
                   className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5 text-left hover:border-primary/50 transition-all group"
+                  suppressHydrationWarning
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-2 bg-primary/10 text-primary rounded-lg group-hover:bg-primary/20 transition-colors">
@@ -351,6 +354,7 @@ export default function AdminDashboard() {
                 <button 
                   onClick={() => setActiveTab("hero")}
                   className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5 text-left hover:border-primary/50 transition-all group"
+                  suppressHydrationWarning
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div className="p-2 bg-green-500/10 text-green-400 rounded-lg group-hover:bg-green-500/20 transition-colors">

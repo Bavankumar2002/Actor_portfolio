@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
 export default function Header() {
@@ -50,9 +51,19 @@ export default function Header() {
           {/* Logo */}
           <Link 
             href="/" 
-            className="text-2xl font-black tracking-tighter text-primary uppercase group"
+            className="flex items-center gap-3 text-2xl font-black tracking-tighter text-primary uppercase group"
           >
-            {firstName}<span className="text-white group-hover:text-primary transition-colors">{lastName}</span>
+            <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-white/10 group-hover:border-primary/50 transition-all duration-500 shadow-2xl">
+              <Image 
+                src="/portfolio_logo.png" 
+                alt="Logo" 
+                fill 
+                className="object-contain p-1"
+              />
+            </div>
+            <span className="hidden sm:inline">
+              {firstName}<span className="text-white group-hover:text-primary transition-colors">{lastName}</span>
+            </span>
           </Link>
 
           {/* Desktop Nav */}
