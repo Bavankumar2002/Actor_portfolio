@@ -157,21 +157,7 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      {/* Action Footer */}
-      <section className="py-24 border-t border-white/5 relative">
-        <div className="max-w-4xl mx-auto text-center px-6">
-          <Sparkles className="mx-auto text-primary mb-6" size={32} />
-          <h2 className="text-3xl md:text-5xl font-bold mb-8">Ready to create something <span className="text-primary italic">legendary?</span></h2>
-          <div className="flex flex-col sm:flex-row justify-center gap-6">
-            <button className="px-10 py-5 bg-primary text-black font-black uppercase tracking-widest hover:scale-105 transition-transform rounded-full">
-              Book for Project
-            </button>
-            <button className="px-10 py-5 border border-white/20 hover:bg-white hover:text-black font-black uppercase tracking-widest transition-all rounded-full">
-              Download Media Kit
-            </button>
-          </div>
-        </div>
-      </section>
+
     </div>
   );
 }
