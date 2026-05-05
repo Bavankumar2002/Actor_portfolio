@@ -16,6 +16,12 @@
   "portfolio": {
     "title": "Stills & Portraits",
     "description": "Capturing the essence of every character through compelling imagery. My portfolio showcases a range of emotions and personas, from intense dramatic headshots to cinematic action stills.",
+    "stats": {
+      "films": "25+",
+      "awards": "12",
+      "languages": "English, Hindi, Tamil",
+      "yearsActive": "10+ Years"
+    },
     "features": [
       {
         "title": "Versatile Expressions",

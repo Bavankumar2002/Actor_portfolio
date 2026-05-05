@@ -513,6 +513,52 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5">
+                  <h3 className="font-bold mb-4">Career Statistics</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm text-gray-400">Total Films</label>
+                      <input 
+                        type="text" 
+                        value={hero.portfolio?.stats?.films || ""} 
+                        onChange={(e) => setHero({...hero, portfolio: {...hero.portfolio, stats: {...(hero.portfolio.stats || {}), films: e.target.value}}})}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-primary/50" 
+                        placeholder="e.g. 25+"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm text-gray-400">Awards Won</label>
+                      <input 
+                        type="text" 
+                        value={hero.portfolio?.stats?.awards || ""} 
+                        onChange={(e) => setHero({...hero, portfolio: {...hero.portfolio, stats: {...(hero.portfolio.stats || {}), awards: e.target.value}}})}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-primary/50" 
+                        placeholder="e.g. 12"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm text-gray-400">Languages</label>
+                      <input 
+                        type="text" 
+                        value={hero.portfolio?.stats?.languages || ""} 
+                        onChange={(e) => setHero({...hero, portfolio: {...hero.portfolio, stats: {...(hero.portfolio.stats || {}), languages: e.target.value}}})}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-primary/50" 
+                        placeholder="e.g. English, Tamil"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm text-gray-400">Years Active</label>
+                      <input 
+                        type="text" 
+                        value={hero.portfolio?.stats?.yearsActive || ""} 
+                        onChange={(e) => setHero({...hero, portfolio: {...hero.portfolio, stats: {...(hero.portfolio.stats || {}), yearsActive: e.target.value}}})}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-primary/50" 
+                        placeholder="e.g. 10+ Years"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-[#0a0a0a] p-6 rounded-xl border border-white/5">
                   <h3 className="font-bold mb-4">Portfolio Features</h3>
                   <div className="space-y-6">
                     {(hero.portfolio?.features || []).map((feature: any, idx: number) => (
