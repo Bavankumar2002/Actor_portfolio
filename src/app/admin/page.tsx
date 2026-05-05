@@ -59,7 +59,21 @@ export default function AdminDashboard() {
         console.error("Failed to fetch initial data:", error);
       }
     };
+
+    const fetchMoviesData = async () => {
+      try {
+        const res = await fetch("/api/movies");
+        const json = await res.json();
+        if (json.success) {
+          setLocalMovies(json.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch movies:", error);
+      }
+    };
+
     fetchHero();
+    fetchMoviesData();
   }, [router]);
 
   const handleLogout = () => {
@@ -101,7 +115,8 @@ export default function AdminDashboard() {
       description: "",
       image: "/poster1.png",
       rating: "5.0/5",
-      trailerUrl: ""
+      trailerUrl: "",
+      watchTrailerUrl: ""
     });
     setIsMovieModalOpen(true);
   };
@@ -111,30 +126,58 @@ export default function AdminDashboard() {
     setIsMovieModalOpen(true);
   };
 
-  const handleDeleteMovie = (id: string) => {
+  const handleDeleteMovie = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this movie?")) {
-      setLocalMovies(localMovies.filter(m => m.id !== id));
-      setMessage("Movie deleted!");
+      const updatedMovies = localMovies.filter(m => m.id !== id);
+      setLocalMovies(updatedMovies);
+      
+      try {
+        await fetch("/api/movies", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedMovies)
+        });
+        setMessage("Movie deleted!");
+      } catch (error) {
+        console.error("Failed to delete movie:", error);
+      }
       setTimeout(() => setMessage(""), 3000);
     }
   };
 
-  const handleSaveMovie = () => {
+  const handleSaveMovie = async () => {
     if (!currentMovie.title) {
       alert("Movie title is required!");
       return;
     }
     
+    let updatedMovies;
     const exists = localMovies.find(m => m.id === currentMovie.id);
     if (exists) {
-      setLocalMovies(localMovies.map(m => m.id === currentMovie.id ? currentMovie : m));
-      setMessage("Movie updated!");
+      updatedMovies = localMovies.map(m => m.id === currentMovie.id ? currentMovie : m);
     } else {
-      setLocalMovies([...localMovies, currentMovie]);
-      setMessage("Movie added!");
+      updatedMovies = [...localMovies, currentMovie];
+    }
+
+    setLocalMovies(updatedMovies);
+    setIsMovieModalOpen(false);
+    setIsSaving(true);
+
+    try {
+      const res = await fetch("/api/movies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedMovies)
+      });
+      if (res.ok) {
+        setMessage(exists ? "Movie updated!" : "Movie added!");
+      }
+    } catch (error) {
+      console.error("Failed to save movie:", error);
+    } finally {
+      setIsSaving(false);
     }
     
-    setIsMovieModalOpen(false);
     setTimeout(() => setMessage(""), 3000);
   };
 
@@ -218,7 +261,9 @@ export default function AdminDashboard() {
               <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full"></span>
             </button>
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-yellow-200"></div>
+              <div className="w-8 h-8 rounded-full overflow-hidden border border-white/10">
+                <img src={hero.backgroundImage} alt={hero.name} className="w-full h-full object-cover" />
+              </div>
               <span className="text-sm font-medium hidden sm:block">{hero.name}</span>
             </div>
           </div>
@@ -850,7 +895,7 @@ export default function AdminDashboard() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-400">Trailer URL (Embed Link)</label>
+                <label className="text-sm font-medium text-gray-400">Live Video Link (Embed URL)</label>
                 <input 
                   type="text" 
                   value={currentMovie.trailerUrl}
@@ -858,6 +903,55 @@ export default function AdminDashboard() {
                   placeholder="https://www.youtube.com/embed/..."
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
                 />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Watch Trailer Link (Button URL)</label>
+                <input 
+                  type="text" 
+                  value={currentMovie.watchTrailerUrl}
+                  onChange={(e) => setCurrentMovie({...currentMovie, watchTrailerUrl: e.target.value})}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-sm font-medium text-gray-400">Movie Banner / Poster Image</label>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1 relative">
+                    <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                    <input 
+                      type="text" 
+                      value={currentMovie.image}
+                      onChange={(e) => setCurrentMovie({...currentMovie, image: e.target.value})}
+                      placeholder="Path or URL"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 focus:border-primary/50 outline-none transition-colors"
+                    />
+                  </div>
+                  <div className="flex gap-4">
+                    <label className="cursor-pointer px-4 py-3 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-all flex items-center gap-2 text-sm font-bold uppercase tracking-wider">
+                      <Edit3 size={16} />
+                      Upload
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        className="hidden" 
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              setCurrentMovie({...currentMovie, image: reader.result as string});
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                      />
+                    </label>
+                    <div className="w-20 h-12 bg-white/5 rounded-lg border border-white/10 overflow-hidden">
+                      <img src={currentMovie.image} alt="preview" className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Camera, Star, Film } from "lucide-react";
+import { Camera, Star, Film, ChevronRight, Award, Sparkles } from "lucide-react";
 import { heroData as initialData } from "@/lib/portfolio-data";
 
 export default function PortfolioPage() {
@@ -34,65 +34,141 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="pt-20 bg-black min-h-screen">
-      <section id="portfolio" className="py-32 px-6 bg-[#0a0a0a]">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
-          {/* Left Side: Images */}
-          <div className="w-full lg:w-3/5 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
-            <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden border border-white/10 group">
-              <Image src={portfolio.images[0] || "/hero.png"} alt="Portfolio 1" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden border border-white/10 group md:translate-y-8">
-              <Image src={portfolio.images[1] || "/headshot_dramatic.png"} alt="Portfolio 2" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden border border-white/10 group">
-              <Image src={portfolio.images[2] || "/poster1.png"} alt="Portfolio 3" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden border border-white/10 group md:translate-y-8">
-              <Image src={portfolio.images[3] || "/character_action.png"} alt="Portfolio 4" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <div className="relative h-[300px] md:h-[500px] rounded-lg overflow-hidden border border-white/10 group sm:col-span-2 md:-translate-y-4">
-              <Image src={portfolio.images[4] || "/poster2.png"} alt="Portfolio 5" fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="bg-black min-h-screen text-white overflow-hidden">
+      {/* Hero Header Section */}
+      <section className="relative pt-32 pb-20 px-6">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[500px] bg-primary/5 blur-[120px] -z-10 rounded-full" />
+        
+        <div className="max-w-7xl mx-auto text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-primary text-xs font-bold uppercase tracking-[0.2em] animate-fade-in">
+            <Camera size={14} /> The Visual Journey
+          </div>
+          <h1 className="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-[0.9]">
+            {portfolio.title.includes("&") ? (
+              <>
+                {portfolio.title.split('&')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-b from-primary to-yellow-600">&</span> {portfolio.title.split('&')[1]}
+              </>
+            ) : portfolio.title}
+          </h1>
+          <p className="max-w-2xl mx-auto text-gray-400 text-lg md:text-xl font-light leading-relaxed">
+            {portfolio.description}
+          </p>
+        </div>
+      </section>
+
+      {/* Main Portfolio Content */}
+      <section className="pb-32 px-6">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 items-start">
+          
+          {/* Feature Highlight Cards (Left Column on Desktop) */}
+          <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-32">
+            {portfolio.features.map((feature: any, i: number) => (
+              <div 
+                key={i} 
+                className="group relative p-8 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-primary/30 transition-all duration-500 overflow-hidden"
+              >
+                <div className="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500">
+                  {i === 0 ? <Star size={120} /> : <Film size={120} />}
+                </div>
+                
+                <div className="relative z-10 flex flex-col gap-4">
+                  <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-black transition-all duration-500">
+                    {i === 0 ? <Star size={24} /> : <Film size={24} />}
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{feature.title}</h4>
+                    <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors">{feature.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent border border-primary/20 relative overflow-hidden group">
+               <div className="relative z-10">
+                 <h4 className="text-xl font-bold mb-2 flex items-center gap-2">
+                   <Award size={20} className="text-primary" /> Recognition
+                 </h4>
+                 <p className="text-gray-400 text-sm mb-4">Featured in over 15+ international publications for character excellence.</p>
+                 <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary group-hover:gap-4 transition-all">
+                   View Accolades <ChevronRight size={14} />
+                 </button>
+               </div>
             </div>
           </div>
 
-          {/* Right Side: Content */}
-          <div className="w-full lg:w-2/5 space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full text-primary border border-primary/20 text-sm font-semibold tracking-widest uppercase">
-              <Camera size={16} /> Portfolio
+          {/* Cinematic Gallery Grid (Right Column on Desktop) */}
+          <div className="lg:col-span-8 grid grid-cols-2 gap-4 md:gap-6">
+            {/* Main Featured Image */}
+            <div className="col-span-2 aspect-[16/9] md:aspect-[21/9] rounded-3xl overflow-hidden border border-white/10 group relative">
+              <Image 
+                src={portfolio.images[0] || "/hero.png"} 
+                alt="Main Spotlight" 
+                fill 
+                className="object-cover transition-transform duration-[1.5s] group-hover:scale-110" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60" />
+              <div className="absolute bottom-8 left-8">
+                <span className="px-3 py-1 bg-primary text-black text-[10px] font-bold uppercase tracking-widest rounded-full mb-2 inline-block">Featured Still</span>
+                <h3 className="text-2xl font-bold">Dramatic Lead</h3>
+              </div>
             </div>
-            
-            {/* Dynamic Title Parsing for Primary Color */}
-            <h2 className="text-4xl md:text-6xl font-bold leading-tight">
-              {portfolio.title.includes("&") ? (
-                <>
-                  {portfolio.title.split('&')[0]} & <span className="text-primary">{portfolio.title.split('&')[1]}</span>
-                </>
-              ) : portfolio.title}
-            </h2>
 
-            <p className="text-gray-400 text-lg leading-relaxed">
-              {portfolio.description}
-            </p>
-
-            <div className="space-y-4">
-              {portfolio.features.map((feature: any, i: number) => (
-                <div key={i} className="flex items-center gap-4 text-gray-300">
-                  <div className="w-12 h-12 flex items-center justify-center rounded-full bg-primary/10 text-primary">
-                    {i === 0 ? <Star size={20} /> : <Film size={20} />}
-                  </div>
-                  <div>
-                    <h4 className="font-bold">{feature.title}</h4>
-                    <p className="text-sm text-gray-500">{feature.description}</p>
-                  </div>
-                </div>
-              ))}
+            {/* Sub Images */}
+            <div className="aspect-[3/4] rounded-3xl overflow-hidden border border-white/10 group relative">
+              <Image 
+                src={portfolio.images[1] || "/headshot_dramatic.png"} 
+                alt="Portfolio 1" 
+                fill 
+                className="object-cover transition-transform duration-[1.5s] group-hover:scale-110" 
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
             </div>
+
+            <div className="aspect-[3/4] rounded-3xl overflow-hidden border border-white/10 group relative md:translate-y-12">
+              <Image 
+                src={portfolio.images[2] || "/poster1.png"} 
+                alt="Portfolio 2" 
+                fill 
+                className="object-cover transition-transform duration-[1.5s] group-hover:scale-110" 
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
+            </div>
+
+            <div className="aspect-[3/4] rounded-3xl overflow-hidden border border-white/10 group relative">
+              <Image 
+                src={portfolio.images[3] || "/character_action.png"} 
+                alt="Portfolio 3" 
+                fill 
+                className="object-cover transition-transform duration-[1.5s] group-hover:scale-110" 
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
+            </div>
+
+            <div className="aspect-[3/4] rounded-3xl overflow-hidden border border-white/10 group relative md:translate-y-12">
+              <Image 
+                src={portfolio.images[4] || "/poster2.png"} 
+                alt="Portfolio 4" 
+                fill 
+                className="object-cover transition-transform duration-[1.5s] group-hover:scale-110" 
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Action Footer */}
+      <section className="py-24 border-t border-white/5 relative">
+        <div className="max-w-4xl mx-auto text-center px-6">
+          <Sparkles className="mx-auto text-primary mb-6" size={32} />
+          <h2 className="text-3xl md:text-5xl font-bold mb-8">Ready to create something <span className="text-primary italic">legendary?</span></h2>
+          <div className="flex flex-col sm:flex-row justify-center gap-6">
+            <button className="px-10 py-5 bg-primary text-black font-black uppercase tracking-widest hover:scale-105 transition-transform rounded-full">
+              Book for Project
+            </button>
+            <button className="px-10 py-5 border border-white/20 hover:bg-white hover:text-black font-black uppercase tracking-widest transition-all rounded-full">
+              Download Media Kit
+            </button>
           </div>
         </div>
       </section>

@@ -8,9 +8,39 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
+import fs from "fs/promises";
+import path from "path";
+
+function getEmbedUrl(url: string) {
+  if (!url) return "";
+  
+  // Already an embed URL
+  if (url.includes("/embed/")) return url;
+  
+  let videoId = "";
+  if (url.includes("youtu.be/")) {
+    // Handle youtu.be/VIDEO_ID
+    videoId = url.split("youtu.be/")[1].split("?")[0];
+  } else if (url.includes("watch?v=")) {
+    // Handle youtube.com/watch?v=VIDEO_ID
+    videoId = url.split("watch?v=")[1].split("&")[0];
+  }
+  
+  return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+}
+
 export default async function MovieDetailsPage({ params }: Props) {
   const { id } = await params;
-  const movie = movies.find((m) => m.id === id);
+  
+  let movie = null;
+  try {
+    const filePath = path.join(process.cwd(), "src/lib/movies.json");
+    const content = await fs.readFile(filePath, "utf-8");
+    const moviesData = JSON.parse(content);
+    movie = moviesData.find((m: any) => m.id === id);
+  } catch (error) {
+    console.error("Failed to read movie data:", error);
+  }
 
   if (!movie) {
     notFound();
@@ -67,7 +97,7 @@ export default async function MovieDetailsPage({ params }: Props) {
                 </h2>
                 <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
                   <iframe 
-                    src={movie.trailerUrl}
+                    src={getEmbedUrl(movie.trailerUrl)}
                     title={`${movie.title} Trailer`}
                     className="w-full h-full"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -121,9 +151,16 @@ export default async function MovieDetailsPage({ params }: Props) {
                   <p className="text-lg font-semibold">{movie.year}</p>
                 </div>
               </div>
-              <button className="w-full mt-10 py-4 bg-primary text-black font-bold uppercase tracking-widest hover:scale-105 transition-transform rounded-sm">
-                Watch Trailer
-              </button>
+              {movie.watchTrailerUrl && (
+                <a 
+                  href={movie.watchTrailerUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full mt-10 py-4 bg-primary text-black font-bold uppercase tracking-widest hover:scale-105 transition-transform rounded-sm flex items-center justify-center"
+                >
+                  Watch Trailer
+                </a>
+              )}
             </div>
           </div>
         </div>

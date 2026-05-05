@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 
 export default function Header() {
   const [name, setName] = useState("Alexander Pierce");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     async function fetchName() {
@@ -19,12 +20,16 @@ export default function Header() {
       }
     }
     fetchName();
+
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close menu when clicking a link
   const closeMenu = () => setIsMenuOpen(false);
 
-  // Split name for styling: first word is primary color, rest is white
   const nameParts = name.split(" ");
   const firstName = nameParts[0];
   const lastName = nameParts.slice(1).join(" ");
@@ -34,79 +39,92 @@ export default function Header() {
     { name: "Portfolio", href: "/portfolio" },
     { name: "Movies", href: "/movies" },
     { name: "Awards", href: "/awards" },
-    { name: "Contact", href: "/#contact" },
   ];
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          {/* Logo/Name */}
+      <nav className={`fixed top-0 w-full z-[100] transition-all duration-500 ${
+        scrolled ? "py-4 bg-black/60 backdrop-blur-xl border-b border-white/5" : "py-8 bg-transparent"
+      }`}>
+        <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
+          {/* Logo */}
           <Link 
             href="/" 
-            className="text-xl md:text-2xl font-bold tracking-widest text-primary uppercase"
+            className="text-2xl font-black tracking-tighter text-primary uppercase group"
           >
-            {firstName} <span className="text-white">{lastName}</span>
+            {firstName}<span className="text-white group-hover:text-primary transition-colors">{lastName}</span>
           </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-8 text-sm uppercase tracking-wider font-semibold">
-            {navLinks.map((link) => (
-              <Link key={link.name} href={link.href} className="hover:text-primary transition-colors">
-                {link.name}
-              </Link>
-            ))}
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-12">
+            <div className="flex gap-10 text-[11px] font-bold uppercase tracking-[0.2em]">
+              {navLinks.map((link) => (
+                <Link 
+                  key={link.name} 
+                  href={link.href} 
+                  className="relative group py-2"
+                >
+                  <span className="group-hover:text-primary transition-colors">{link.name}</span>
+                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-primary group-hover:w-full transition-all duration-300" />
+                </Link>
+              ))}
+            </div>
+            
+            <Link 
+              href="/#contact" 
+              className="px-6 py-2.5 bg-white text-black text-[11px] font-bold uppercase tracking-widest rounded-full hover:bg-primary transition-colors flex items-center gap-2"
+            >
+              Get in Touch <ArrowUpRight size={14} />
+            </Link>
           </div>
 
-          {/* Mobile Menu Toggle */}
+          {/* Mobile Toggle */}
           <button 
-            className="md:hidden text-white p-2"
+            className="md:hidden text-white p-2 bg-white/5 rounded-full border border-white/10"
             onClick={() => setIsMenuOpen(true)}
             aria-label="Open Menu"
           >
-            <Menu size={28} />
+            <Menu size={24} />
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay - Modal Pop in Central */}
+      {/* Mobile Menu */}
       <div 
-        className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-500 md:hidden ${
+        className={`fixed inset-0 z-[200] flex items-center justify-center transition-all duration-700 md:hidden ${
           isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
-        {/* Backdrop */}
-        <div 
-          className="absolute inset-0 bg-black/95 backdrop-blur-2xl"
-          onClick={closeMenu}
-        />
-
-        {/* Close Button in Overlay */}
+        <div className="absolute inset-0 bg-black/95 backdrop-blur-3xl" onClick={closeMenu} />
+        
         <button 
-          className="absolute top-6 right-6 text-white p-2 z-[101]"
+          className="absolute top-8 right-8 text-white p-3 bg-white/5 rounded-full border border-white/10 z-[201]"
           onClick={closeMenu}
-          aria-label="Close Menu"
         >
-          <X size={32} />
+          <X size={28} />
         </button>
 
-        {/* Modal Content */}
-        <div className={`relative z-[101] flex flex-col items-center space-y-8 transition-all duration-500 transform ${
-          isMenuOpen ? "scale-100 opacity-100" : "scale-90 opacity-0"
+        <div className={`relative z-[201] flex flex-col items-center gap-10 transition-all duration-700 transform ${
+          isMenuOpen ? "scale-100 opacity-100 translate-y-0" : "scale-90 opacity-0 translate-y-10"
         }`}>
           {navLinks.map((link, index) => (
             <Link 
               key={link.name} 
               href={link.href} 
               onClick={closeMenu}
-              className={`text-3xl font-black uppercase tracking-[0.2em] transition-all duration-300 hover:text-primary ${
-                isMenuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-              }`}
-              style={{ transitionDelay: `${index * 50}ms` }}
+              className="text-4xl font-black uppercase tracking-[0.2em] hover:text-primary transition-colors"
+              style={{ transitionDelay: `${index * 100}ms` }}
             >
               {link.name}
             </Link>
           ))}
+          <Link 
+            href="/#contact" 
+            onClick={closeMenu}
+            className="mt-8 px-10 py-5 bg-primary text-black text-sm font-black uppercase tracking-widest rounded-full flex items-center gap-2"
+          >
+            Contact Now <ArrowUpRight size={18} />
+          </Link>
         </div>
       </div>
     </>

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
 
-const filePath = path.join(process.cwd(), "src/lib/portfolio-data.json");
+const filePath = path.join(process.cwd(), "src/lib/movies.json");
 
 export async function GET() {
   try {
@@ -15,8 +15,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const newData = await request.json();
-    await fs.writeFile(filePath, JSON.stringify(newData, null, 2), "utf-8");
+    const newMovies = await request.json();
+    await fs.writeFile(filePath, JSON.stringify(newMovies, null, 2), "utf-8");
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, error: (error as Error).message });

@@ -1,22 +1,4 @@
-export interface Movie {
-  id: string;
-  title: string;
-  year: string;
-  role: string;
-  genre: string;
-  director: string;
-  description: string;
-  image: string;
-  rating: string;
-  duration: string;
-  language: string;
-  music: string;
-  production: string;
-  trailerUrl: string; // Live Video Link (Embed)
-  watchTrailerUrl: string; // Watch Trailer Link (Button)
-}
-
-export const movies: Movie[] = [
+[
   {
     "id": "neon-shadows",
     "title": "Neon Shadows",
@@ -82,4 +64,4 @@ export const movies: Movie[] = [
     "trailerUrl": "https://youtu.be/MIB1Yjzn93E?si=_TIspJwKUWRqgnyj",
     "watchTrailerUrl": "https://youtu.be/ugJ7TETZnn0?si=PmQFFza7Xtx7ad0x"
   }
-];
+]
