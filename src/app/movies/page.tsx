@@ -91,7 +91,7 @@ export default function MoviesPage() {
                     {/* Glassmorphism Badge */}
                     <div className="absolute top-6 right-6 px-4 py-2 bg-black/40 backdrop-blur-md border border-white/10 rounded-full flex items-center gap-2">
                       <Star size={12} className="text-primary fill-primary" />
-                      <span className="text-[10px] font-bold tracking-widest">{movie.rating || "5.0"}</span>
+                      <span className="text-[10px] font-bold tracking-widest">{movie.rating ? `${movie.rating}/10` : "9.0/10"}</span>
                     </div>
 
                     {/* Gradient Overlay */}

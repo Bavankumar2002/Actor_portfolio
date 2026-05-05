@@ -13,10 +13,10 @@ import path from "path";
 
 function getEmbedUrl(url: string) {
   if (!url) return "";
-  
+
   // Already an embed URL
   if (url.includes("/embed/")) return url;
-  
+
   let videoId = "";
   if (url.includes("youtu.be/")) {
     // Handle youtu.be/VIDEO_ID
@@ -25,13 +25,13 @@ function getEmbedUrl(url: string) {
     // Handle youtube.com/watch?v=VIDEO_ID
     videoId = url.split("watch?v=")[1].split("&")[0];
   }
-  
+
   return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
 }
 
 export default async function MovieDetailsPage({ params }: Props) {
   const { id } = await params;
-  
+
   let movie = null;
   try {
     const filePath = path.join(process.cwd(), "src/lib/movies.json");
@@ -51,16 +51,16 @@ export default async function MovieDetailsPage({ params }: Props) {
       {/* Hero Section */}
       <section className="relative h-[85vh] flex items-end">
         <div className="absolute inset-0 z-0">
-          <Image 
-            src={movie.image} 
-            alt={movie.title} 
-            fill 
+          <Image
+            src={movie.image}
+            alt={movie.title}
+            fill
             className="object-cover opacity-40"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
         </div>
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-6 pb-16 w-full">
           <Link href="/movies" className="inline-flex items-center gap-2 text-primary hover:text-white transition-colors mb-8 font-bold uppercase tracking-widest text-sm">
             <ArrowLeft size={16} /> Back to Movies
@@ -74,7 +74,7 @@ export default async function MovieDetailsPage({ params }: Props) {
               <div className="text-center">
                 <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Rating</p>
                 <p className="text-2xl font-bold flex items-center justify-center gap-2 text-primary">
-                  <Star size={20} fill="currentColor" /> {movie.rating}
+                  <Star size={20} fill="currentColor" /> {movie.rating}/10
                 </p>
               </div>
               <div className="text-center border-l border-white/10 pl-8">
@@ -93,10 +93,10 @@ export default async function MovieDetailsPage({ params }: Props) {
             {movie.trailerUrl && (
               <div className="mb-16">
                 <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
-                  <PlayCircle className="text-primary" /> Watch Video                
+                  <PlayCircle className="text-primary" /> Watch Video
                 </h2>
                 <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-                  <iframe 
+                  <iframe
                     src={getEmbedUrl(movie.trailerUrl)}
                     title={`${movie.title} Trailer`}
                     className="w-full h-full"
@@ -115,7 +115,7 @@ export default async function MovieDetailsPage({ params }: Props) {
                 {movie.description}
               </p>
             </div>
-            
+
           </div>
 
           <div className="space-y-8">
@@ -152,9 +152,9 @@ export default async function MovieDetailsPage({ params }: Props) {
                 </div>
               </div>
               {movie.watchTrailerUrl && (
-                <a 
-                  href={movie.watchTrailerUrl} 
-                  target="_blank" 
+                <a
+                  href={movie.watchTrailerUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-full mt-10 py-4 bg-primary text-black font-bold uppercase tracking-widest hover:scale-105 transition-transform rounded-sm flex items-center justify-center"
                 >

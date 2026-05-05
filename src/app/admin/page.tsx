@@ -914,6 +914,32 @@ export default function AdminDashboard() {
                   className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors"
                 />
               </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Star Rating</label>
+                <select 
+                  value={currentMovie.rating || "9.0"}
+                  onChange={(e) => setCurrentMovie({...currentMovie, rating: e.target.value})}
+                  className="w-full bg-[#111] border border-white/10 rounded-lg px-4 py-3 focus:border-primary/50 outline-none transition-colors text-white"
+                >
+                  <option value="10.0" className="bg-[#111] text-white">10.0 - Masterpiece</option>
+                  <option value="9.5" className="bg-[#111] text-white">9.5 - Outstanding</option>
+                  <option value="9.0" className="bg-[#111] text-white">9.0 - Excellent</option>
+                  <option value="8.5" className="bg-[#111] text-white">8.5 - Great</option>
+                  <option value="8.0" className="bg-[#111] text-white">8.0 - Very Good</option>
+                  <option value="7.5" className="bg-[#111] text-white">7.5 - Good</option>
+                  <option value="7.0" className="bg-[#111] text-white">7.0 - Decent</option>
+                  <option value="6.0" className="bg-[#111] text-white">6.0 - Average</option>
+                  <option value="5.0" className="bg-[#111] text-white">5.0 - Mediocre</option>
+                  <option value="4.5" className="bg-[#111] text-white">4.5 - Poor</option>
+                  <option value="4.0" className="bg-[#111] text-white">4.0 - Below Average</option>
+                  <option value="3.5" className="bg-[#111] text-white">3.5 - Bad</option>
+                  <option value="3.0" className="bg-[#111] text-white">3.0 - Very Bad</option>
+                  <option value="2.5" className="bg-[#111] text-white">2.5 - Horrible</option>
+                  <option value="2.0" className="bg-[#111] text-white">2.0 - Terrible</option>
+                  <option value="1.5" className="bg-[#111] text-white">1.5 - Awful</option>
+                  <option value="1.0" className="bg-[#111] text-white">1.0 - Disaster</option>
+                </select>
+              </div>
               <div className="space-y-2 md:col-span-2">
                 <label className="text-sm font-medium text-gray-400">Movie Banner / Poster Image</label>
                 <div className="flex flex-col sm:flex-row gap-4">

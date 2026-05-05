@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Film, MessageCircle, Globe, Mail, PlayCircle, Star, ArrowRight, Award, Camera, Phone, MapPin, Sparkles, ChevronRight, MessageSquare, Share2, Link2 } from "lucide-react";
+import { Film, MessageCircle, Globe, Mail, PlayCircle, Star, ArrowRight, Award, Camera, Phone, MapPin, Sparkles, ChevronRight, MessageSquare, Share2, Link2, Send, Instagram, Facebook, Play } from "lucide-react";
 import { heroData as initialHeroData } from "@/lib/portfolio-data";
 
 export default function Home() {
   const [hero, setHero] = useState(initialHeroData);
+  const [featuredMovies, setFeaturedMovies] = useState<any[]>([]);
 
   useEffect(() => {
     async function refreshData() {
@@ -15,8 +16,12 @@ export default function Home() {
         const res = await fetch("/api/portfolio");
         const json = await res.json();
         if (json.success) setHero(json.data);
+
+        const movieRes = await fetch("/api/movies");
+        const movieJson = await movieRes.json();
+        if (movieJson.success) setFeaturedMovies(movieJson.data.slice(0, 3));
       } catch (e) {
-        console.error("Failed to refresh portfolio data", e);
+        console.error("Failed to refresh data", e);
       }
     }
     refreshData();
@@ -113,7 +118,60 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. Contact Section - Cinematic Redesign */}
+      {/* Featured Works Section - Connect to Front Page */}
+      {featuredMovies.length > 0 && (
+        <section className="py-32 px-6 bg-[#050505] relative">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 text-primary text-[10px] font-black uppercase tracking-[0.3em]">
+                   <Star size={14} className="fill-primary" /> Rated Performances
+                </div>
+                <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">Featured <span className="text-primary">Works</span></h2>
+              </div>
+              <Link href="/movies" className="group flex items-center gap-3 text-sm font-bold uppercase tracking-widest hover:text-primary transition-all">
+                View Full Filmography <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {featuredMovies.map((movie, i) => (
+                <Link key={movie.id} href={`/movies/${movie.id}`} className="group relative aspect-[3/4] overflow-hidden rounded-[2.5rem] border border-white/5 bg-[#111]">
+                  <Image
+                    src={movie.image}
+                    alt={movie.title}
+                    fill
+                    className="object-cover transition-transform duration-[1.5s] group-hover:scale-110 opacity-50 group-hover:opacity-100"
+                  />
+                  
+                  {/* Rating Badge */}
+                  <div className="absolute top-6 right-6 px-4 py-2 bg-black/40 backdrop-blur-md border border-white/10 rounded-full flex items-center gap-2 z-10">
+                    <Star size={12} className="text-primary fill-primary" />
+                    <span className="text-[10px] font-bold tracking-widest text-white">{movie.rating ? `${movie.rating}/10` : "9.0/10"}</span>
+                  </div>
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 group-hover:opacity-40 transition-opacity duration-700" />
+                  
+                  <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                    <p className="text-primary text-[10px] font-black tracking-[0.3em] uppercase mb-2">
+                      {movie.role} • {movie.year}
+                    </p>
+                    <h3 className="text-2xl font-black uppercase tracking-tighter mb-4 group-hover:text-primary transition-colors">
+                      {movie.title}
+                    </h3>
+                    <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+                      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-black">
+                        <Play size={14} fill="currentColor" />
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Details</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
       <section id="contact" className="py-40 px-6 bg-black relative overflow-hidden">
         {/* Cinematic Spotlight Effect */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/5 rounded-full blur-[120px] -z-0 pointer-events-none" />
@@ -137,61 +195,89 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Direct Contact Info */}
-              <div className="grid sm:grid-cols-2 gap-8 pt-4">
-                <a href={`mailto:${hero.contactEmail}`} className="group p-8 bg-white/[0.02] border border-white/5 rounded-2xl hover:bg-white/[0.05] hover:border-primary/30 transition-all duration-500">
-                  <Mail className="text-primary mb-4 group-hover:scale-110 transition-transform" size={24} />
-                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Email</p>
-                  <p className="text-white font-medium truncate">{hero.contactEmail}</p>
+               {/* Direct Contact Info Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                <a href={`mailto:${hero.contactEmail}`} className="group p-6 bg-white/[0.02] border border-white/5 rounded-2xl hover:bg-white/[0.05] hover:border-primary/30 transition-all duration-500">
+                  <Mail className="text-primary mb-3 group-hover:scale-110 transition-transform" size={20} />
+                  <p className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Email</p>
+                  <p className="text-white font-medium text-sm truncate">{hero.contactEmail}</p>
                 </a>
                 
-                {hero.phone && (
-                  <a href={`tel:${hero.phone}`} className="group p-8 bg-white/[0.02] border border-white/5 rounded-2xl hover:bg-white/[0.05] hover:border-primary/30 transition-all duration-500">
-                    <Phone className="text-primary mb-4 group-hover:scale-110 transition-transform" size={24} />
-                    <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-1">Phone</p>
-                    <p className="text-white font-medium">{hero.phone}</p>
-                  </a>
-                )}
+                <a href={`tel:${hero.phone || "#"}`} className="group p-6 bg-white/[0.02] border border-white/5 rounded-2xl hover:bg-white/[0.05] hover:border-primary/30 transition-all duration-500">
+                  <Phone className="text-primary mb-3 group-hover:scale-110 transition-transform" size={20} />
+                  <p className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Phone / Mobile</p>
+                  <p className="text-white font-medium text-sm">{hero.phone || "Not available"}</p>
+                </a>
+
+                <a href={hero.socials?.whatsapp ? `https://wa.me/${hero.socials.whatsapp}` : "#"} target="_blank" rel="noopener noreferrer" className="group p-6 bg-white/[0.02] border border-white/5 rounded-2xl hover:bg-white/[0.05] hover:border-green-500/30 transition-all duration-500">
+                  <MessageCircle className="text-green-500 mb-3 group-hover:scale-110 transition-transform" size={20} />
+                  <p className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">WhatsApp</p>
+                  <p className="text-white font-medium text-sm">{hero.socials?.whatsapp ? "Message Me" : "Not linked"}</p>
+                </a>
+
+                <a href={hero.socials?.instagram || "#"} target="_blank" rel="noopener noreferrer" className="group p-6 bg-white/[0.02] border border-white/5 rounded-2xl hover:bg-white/[0.05] hover:border-pink-500/30 transition-all duration-500">
+                  <Globe className="text-pink-500 mb-3 group-hover:scale-110 transition-transform" size={20} />
+                  <p className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Instagram</p>
+                  <p className="text-white font-medium text-sm">{hero.socials?.instagram ? "Follow Me" : "Not linked"}</p>
+                </a>
+
+                <a href={hero.socials?.facebook || "#"} target="_blank" rel="noopener noreferrer" className="group p-6 bg-white/[0.02] border border-white/5 rounded-2xl hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-500">
+                  <Globe className="text-blue-500 mb-3 group-hover:scale-110 transition-transform" size={20} />
+                  <p className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Facebook</p>
+                  <p className="text-white font-medium text-sm">{hero.socials?.facebook ? "Connect" : "Not linked"}</p>
+                </a>
               </div>
             </div>
 
-            {/* Right Column: Representation & Socials */}
+            {/* Right Column: Send Message Form */}
             <div className="lg:w-1/2">
-              <div className="h-full flex flex-col justify-between p-12 bg-white/[0.02] border border-white/5 rounded-[3rem] backdrop-blur-xl relative group">
+              <div className="h-full flex flex-col p-10 sm:p-12 bg-white/[0.02] border border-white/5 rounded-[3rem] backdrop-blur-xl relative group overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 rounded-[3rem]" />
                 
-                <div className="relative">
-                  <h3 className="text-3xl font-black uppercase tracking-tighter mb-4 italic text-white">Representation</h3>
-                  <p className="text-gray-400 mb-12 font-light">Connect through official channels or social platforms for the quickest response.</p>
-                  
-                  <div className="grid grid-cols-4 gap-4 mb-16">
-                    {hero.socials?.instagram && (
-                      <a href={hero.socials.instagram} target="_blank" rel="noopener noreferrer" className="aspect-square flex items-center justify-center bg-white/5 rounded-2xl border border-white/10 hover:bg-primary hover:text-black transition-all transform hover:-translate-y-2">
-                        <Globe size={28} />
-                      </a>
-                    )}
-                    {hero.socials?.whatsapp && (
-                      <a href={hero.socials.whatsapp} target="_blank" rel="noopener noreferrer" className="aspect-square flex items-center justify-center bg-white/5 rounded-2xl border border-white/10 hover:bg-green-500 hover:text-white transition-all transform hover:-translate-y-2">
-                        <MessageSquare size={28} />
-                      </a>
-                    )}
-                    {hero.socials?.facebook && (
-                      <a href={hero.socials.facebook} target="_blank" rel="noopener noreferrer" className="aspect-square flex items-center justify-center bg-white/5 rounded-2xl border border-white/10 hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-2">
-                        <Globe size={28} />
-                      </a>
-                    )}
-                    {hero.socials?.twitter && (
-                      <a href={hero.socials.twitter} target="_blank" rel="noopener noreferrer" className="aspect-square flex items-center justify-center bg-white/5 rounded-2xl border border-white/10 hover:bg-sky-400 hover:text-white transition-all transform hover:-translate-y-2">
-                        <Share2 size={28} />
-                      </a>
-                    )}
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-3xl font-black uppercase tracking-tighter italic text-white">Send Message</h3>
                   </div>
-                </div>
-
-                <div className="relative mt-auto">
-                  <Link href="/contact" className="w-full py-6 bg-primary text-black font-black uppercase tracking-[0.2em] text-sm rounded-xl flex items-center justify-center gap-3 hover:bg-white transition-all duration-500 group shadow-[0_0_50px_rgba(212,175,55,0.2)]">
-                    Start a Project <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
-                  </Link>
+                  
+                  <p className="text-gray-400 mb-10 font-light leading-relaxed">
+                    Have a project in mind or looking for a collaboration? Drop a message below and I'll get back to you soon.
+                  </p>
+                  
+                  <form className="space-y-5 flex-1 flex flex-col">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-primary/70 ml-1">Full Name</label>
+                        <input 
+                          type="text" 
+                          placeholder="Your Name" 
+                          className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-primary/50 transition-all text-sm hover:bg-white/[0.07] text-white"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-primary/70 ml-1">Email Address</label>
+                        <input 
+                          type="email" 
+                          placeholder="your@email.com" 
+                          className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-primary/50 transition-all text-sm hover:bg-white/[0.07] text-white"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2 flex-1">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-primary/70 ml-1">Message</label>
+                      <textarea 
+                        placeholder="Tell me about your project or inquiry..." 
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:border-primary/50 transition-all text-sm hover:bg-white/[0.07] text-white resize-none h-full min-h-[180px]"
+                      ></textarea>
+                    </div>
+                    
+                    <button 
+                      type="submit" 
+                      className="w-full py-6 bg-primary text-black font-black uppercase tracking-[0.2em] text-sm rounded-2xl flex items-center justify-center gap-3 hover:bg-white transition-all duration-500 group shadow-[0_0_50px_rgba(201,162,39,0.1)] mt-4 active:scale-[0.98]"
+                    >
+                      Send Message <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
